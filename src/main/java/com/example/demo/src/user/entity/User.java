@@ -4,6 +4,7 @@ import com.example.demo.common.entity.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(callSuper = false)
@@ -29,13 +30,24 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private boolean isOAuth;
 
+    @Enumerated(EnumType.STRING)
+    private LoginType loginType = LoginType.SELF; // 로그인 타입 (SELF, KAKAO, NAVER, GOOGLE, APPLE 등)
+
+    @Enumerated(EnumType.STRING)
+    private AccountStatus accountStatus = AccountStatus.ACTIVE; // 계정 상태 (ACTIVE, DORMANT, BLOCKED, WITHDRAWN 등)
+
+    private Boolean isPersonalInfoAgreed; // 개인정보 처리 동의 여부
+    private LocalDateTime personalInfoAgreementDate; // 개인정보 처리 동의 일시
     @Builder
-    public User(Long id, String email, String password, String name, boolean isOAuth) {
-        this.id = id;
+    public User(String email, String password, String name, Boolean isOAuth, LoginType loginType, AccountStatus accountStatus, Boolean isPersonalInfoAgreed, LocalDateTime personalInfoAgreementDate) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.isOAuth = isOAuth;
+        this.loginType = loginType;
+        this.accountStatus = accountStatus;
+        this.isPersonalInfoAgreed = isPersonalInfoAgreed;
+        this.personalInfoAgreementDate = personalInfoAgreementDate;
     }
 
     public void updateName(String name) {
@@ -47,3 +59,4 @@ public class User extends BaseEntity {
     }
 
 }
+

@@ -14,20 +14,18 @@ spring:
     init:
       platform: mysql
   datasource:
-    url: jdbc:mysql://localhost:3306/demo?autoReconnect=true&setTimezone=Asia/Seoul # 변경해주세요
-    username: # username
-    password: # password
+    url: jdbc:mysql://127.0.0.1:3306/gridge_db?autoReconnect=true
+    username: root
+    password: 5628
     driver-class-name: com.mysql.cj.jdbc.Driver # mysql 8버전
-    # driver-class-name: com.mysql.jdbc.Driver # mysql 5버전
   OAuth2:
     google:
       url: https://accounts.google.com/o/oauth2/v2/auth
-      client-id: # client-id
-      client-secret:  # client-secret
-      callback-login-url: http://localhost:9000/app/users/auth/google/login/callback # 등록한 정보에 맞게 수정해주세요
-      scope: https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile # 등록한 정보에 맞게 수정해주세요
+      client-id: 695645793331-jojcpb9iq6sme515umomnut05qui7vl6.apps.googleusercontent.com # client-id
+      client-secret:  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 # client-secret
+      callback-login-url: http://localhost:9000/app/users/auth/google/login/callback
+      scope: "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"
 
-spring.sql.init.platform: mysql
 server:
   port: 9000
 
@@ -53,16 +51,11 @@ jwt:
 spring:
   config:
     activate:
-      on-profile: "prod"
+      on-profile: "common"
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
-      ddl-auto: none
-      # create, update, create-drop, none 등의 옵션이 있습니다.
-      # create: 기존테이블 삭제 후 다시 생성
-      # update: 변경된 부분만 반영
-      # create-drop: create와 같으나 종료 시점에 테이블 DROP
-      # none: 사용하지 않음
+      ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     # DDl 생성 시 데이터베이스 고유의 기능 사용여부

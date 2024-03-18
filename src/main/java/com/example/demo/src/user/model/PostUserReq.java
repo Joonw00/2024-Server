@@ -1,5 +1,7 @@
 package com.example.demo.src.user.model;
 
+import com.example.demo.src.user.entity.AccountStatus;
+import com.example.demo.src.user.entity.LoginType;
 import com.example.demo.src.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,6 +16,7 @@ public class PostUserReq {
     private String email;
     private String password;
     private String name;
+    private String loginType;
 
     private boolean isOAuth;
 
@@ -23,6 +26,8 @@ public class PostUserReq {
                 .password(this.password)
                 .name(this.name)
                 .isOAuth(this.isOAuth)
+                .accountStatus(AccountStatus.ACTIVE)
+                .loginType(LoginType.valueOf(this.loginType.toUpperCase())) // loginType 처리 추가
                 .build();
     }
 }
