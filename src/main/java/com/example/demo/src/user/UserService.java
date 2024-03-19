@@ -127,4 +127,6 @@ public class UserService {
         User user = userRepository.findByEmailAndState(email, ACTIVE).orElseThrow(() -> new BaseException(NOT_FIND_USER));
         return new GetUserRes(user);
     }
+
+
 }

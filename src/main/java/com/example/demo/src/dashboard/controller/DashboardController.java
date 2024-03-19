@@ -8,6 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
+// TODO : try-catch 수정
+// TODO : 응답 형식 통일  -> common의 response 참고
+
 @RestController
 @RequestMapping("/dashboard")
 @RequiredArgsConstructor
@@ -21,10 +24,21 @@ public class DashboardController {
                                       @RequestParam(required = false) Integer size) {
         // pageIndex와 size의 유효성 검사
         if (pageIndex == null || size == null || pageIndex < 0 || size <= 0) {
-            return ResponseEntity.badRequest().body("Invalid pageIndex or size");
+            return ResponseEntity.badRequest().body(Map.of(
+                    "status", "fail",
+                    "data", Map.of(
+                            "message", "Invalid pageIndex or size",
+                            "pageIndex", pageIndex,
+                            "size", size
+                    )
+            ));
         }
-        return ResponseEntity.ok(dashboardService.getPosts(pageIndex, size));
+        return ResponseEntity.ok(Map.of(
+                "status", "success",
+                "data", dashboardService.getPosts(pageIndex, size)
+        ));
     }
+
 
     // 게시물 생성
     @PostMapping("/posts")
