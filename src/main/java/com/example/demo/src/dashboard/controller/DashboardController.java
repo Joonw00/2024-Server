@@ -1,5 +1,6 @@
 package com.example.demo.src.dashboard.controller;
 
+import com.example.demo.src.admin.model.ReportRequest;
 import com.example.demo.src.dashboard.model.Post;
 import com.example.demo.src.dashboard.service.DashboardService;
 import lombok.RequiredArgsConstructor;
@@ -71,12 +72,13 @@ public class DashboardController {
 
     // 게시물 신고
     @PostMapping("/posts/{postId}/report")
-    public ResponseEntity<?> reportPost(@PathVariable Long postId) {
+    public ResponseEntity<?> reportPost(@PathVariable Long postId, @RequestBody ReportRequest reportRequest) {
         try {
-            dashboardService.reportPost(postId);
+            // 신고 처리 서비스 호출
+            dashboardService.reportPost(postId, reportRequest.getReason());
             return ResponseEntity.ok().body(Map.of(
                     "status", "success",
-                    "data", Map.of("message", "Post reported successfully")
+                    "message", "Post reported successfully"
             ));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(

@@ -1,7 +1,9 @@
 package com.example.demo.src.dashboard.service;
 
+import com.example.demo.src.admin.entity.ReportHistory;
 import com.example.demo.src.dashboard.model.Attachment;
 import com.example.demo.src.dashboard.repository.AttachmentRepository;
+import com.example.demo.src.admin.repository.ReportHistoryRepository;
 import com.example.demo.src.dashboard.model.Post;
 import com.example.demo.src.dashboard.repository.DashboardRepository;
 import com.example.demo.src.user.entity.User;
@@ -14,6 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +35,7 @@ public class DashboardService {
     private final UserRepository userRepository;
 
     private final AttachmentRepository attachmentRepository;
+    private final ReportHistoryRepository reportHistoryRepository;
 
     public List<Post> getPosts(int pageIndex, int size) {
         Pageable pageable = PageRequest.of(pageIndex, size, Sort.by("id").descending());
@@ -128,13 +133,22 @@ public class DashboardService {
     }
 
 
-    public void reportPost(Long postId) {
+    // TODO : 단일책임 지키게 수정할 것
+    public void reportPost(Long postId, String reason) {
         Post post = dashboardRepository.findById(postId).orElseThrow(() ->
                 new IllegalArgumentException("Post not found with id " + postId));
         post.markAsInvisible();
         dashboardRepository.save(post);
-    }
 
+        // ReportHistory 기록
+        ReportHistory reportHistory = new ReportHistory();
+        reportHistory.setReason(reason);
+        reportHistory.setReportedAt(LocalDateTime.now());
+        reportHistory.setCreatedAt(LocalDateTime.now());
+        reportHistory.setUpdatedAt(LocalDateTime.now());
+
+        reportHistoryRepository.save(reportHistory);
+    }
 
 
     private void validatePost(Post post) {
