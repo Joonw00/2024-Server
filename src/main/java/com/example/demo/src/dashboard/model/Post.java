@@ -7,7 +7,10 @@ import com.example.demo.src.user.entity.User;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
+// TODO : 날짜 형식 수정 -> response 수정하면서 같이할 것
 @Entity
 @Getter
 @Table(name = "posts")
@@ -29,6 +32,11 @@ public class Post extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY) // 게시물과 사용자는 다대일 관계
     @JoinColumn(name = "user_id") // 외래키가 될 컬럼명 지정
     private User user; // 게시물의 작성자
+
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Attachment> attachments = new ArrayList<>(); // 첨부파일
+
 
     // 상태 변경 메서드
     public void update(String title, String content) {
